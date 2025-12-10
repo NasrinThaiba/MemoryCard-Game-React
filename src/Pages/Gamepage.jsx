@@ -101,8 +101,8 @@ export default function GamePage({ difficulty = 'easy', onQuit }) {
       // const nextArray = [...clicked];
       // nextArray.push(id);
       nextSet.add(id);
-      setClicked(nextArray);
-      console.log(nextArray);
+      setClicked(nextSet);
+      console.log(nextSet);
 
       setScore((prev) => {
         const score = prev + 1;
