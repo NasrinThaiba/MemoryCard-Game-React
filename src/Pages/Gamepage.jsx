@@ -30,13 +30,15 @@ export default function GamePage({ difficulty = 'easy', onQuit }) {
     return Number(localStorage.getItem(key)) || 0;
   });
 
-  const [clicked, setClicked] = useState(new Set()); //store the value, eliminate duplicate 
+  // const [clicked, setClicked] = useState([]); //store the value, eliminate duplicate 
+  const [clicked, setClicked] = useState(new Set())
   const[status, setStatus] = useState("");
   const count = getCardCountByDifficulty(difficulty);
   
   useEffect(() => {
     setScore(0);
-    setClicked(new Set());
+    setClicked(new Set())
+    // setClicked([]);
     setStatus('');
     const key = getStorageKey(difficulty);
     const scoreValue = Number(localStorage.getItem(key)) || 0;
@@ -59,14 +61,13 @@ export default function GamePage({ difficulty = 'easy', onQuit }) {
           name: a.title,
           image: a.images?.jpg?.image_url || '',
         }));
-       
-        {setCards(normalized)}
+        setCards(normalized)
 
       } catch (e) {
-        {setError('Failed to fetch cards. Please try again.')}
+        setError('Failed to fetch cards. Please try again.')
 
       } finally {
-        {setLoading(false)}
+        setLoading(false)
       }
     }
     
@@ -89,6 +90,7 @@ export default function GamePage({ difficulty = 'easy', onQuit }) {
   const handleCardClick = (id) => {
     if(gameover) return;
 
+    // if (clicked.includes(id)) {
     if (clicked.has(id)) {
     setStatus("You Lose the Match! Try again!");
     setGameover(true);
@@ -96,8 +98,11 @@ export default function GamePage({ difficulty = 'easy', onQuit }) {
      
     } else {
       const nextSet = new Set(clicked);
+      // const nextArray = [...clicked];
+      // nextArray.push(id);
       nextSet.add(id);
-      setClicked(nextSet);
+      setClicked(nextArray);
+      console.log(nextArray);
 
       setScore((prev) => {
         const score = prev + 1;
@@ -111,10 +116,12 @@ export default function GamePage({ difficulty = 'easy', onQuit }) {
         return score;
        });
 
-      if (nextSet.size === count) {
+      // if (nextArray.length === count) {
+         if (nextSet.size === count) {
       setStatus(" You Win the Match!!");
       setGameover(true);
     }
+
     }
     setOrder((prev) => shuffle([...prev]));
 
@@ -123,6 +130,7 @@ export default function GamePage({ difficulty = 'easy', onQuit }) {
     function Restart(){
       setScore(0);
       setClicked(new Set());
+      // setClicked([]);
       setStatus("");
       setGameover(false);
       setOrder((prev) => shuffle([...prev]));
